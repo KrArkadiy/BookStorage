@@ -27,7 +27,7 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             statement = connection.createStatement();
 
             String creatingLabelTable = "CREATE TABLE label " +
-                    "(id INTEGER NOT NULL AUTO_INCREMENT," +
+                    "(id INTEGER NOT NULL," +
                     "name VARCHAR (255))";
             statement.executeUpdate(creatingLabelTable);
             System.out.println("Table successfully created...");
