@@ -25,11 +25,12 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Creating table in selected database...");
             statement = connection.createStatement();
 
-            String creatingWriterTable = "CREATE TABLE Post " +
+            String creatingWriterTable = "CREATE TABLE Post (" +
                     "id INTEGER NOT NULL, " +
                     "content VARCHAR (255), " +
                     "created INTEGER NOT NULL, " +
-                    "updated INTEGER NOT NULL)";
+                    "updated INTEGER NOT NULL," +
+                    "label_id INTEGER)";
 
             statement.executeUpdate(creatingWriterTable);
             System.out.println("Table successfully created...");
@@ -57,8 +58,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Inserting information in selected database...");
             statement = connection.createStatement();
 
-            String insertInformationFirst = "INSERT INTO Post (content, created, updated) VALUES ('firstContent', 1, 1)";
-            String insertInformationSecond = "INSERT INTO Post (content, created, updated) VALUES ('secondContent', 1, 1)";
+            String insertInformationFirst = "INSERT INTO Post (id, content, created, updated, label_id) VALUES (1, 'firstContent', 1, 1,1)";
+            String insertInformationSecond = "INSERT INTO Post (id, content, created, updated, label_id) VALUES (2, 'secondContent', 1, 1,2)";
 
             statement.executeUpdate(insertInformationFirst);
             statement.executeUpdate(insertInformationSecond);
@@ -95,7 +96,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Getting post...");
             statement = connection.createStatement();
 
-            String gettingPostById = "SELECT id, content, created, updated, name FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE id = " + aLong;
+            String gettingPostById = "SELECT * FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE post.id = " + aLong;
             ResultSet resultSet = statement.executeQuery(gettingPostById);
 
             while (resultSet.next()) {
@@ -103,7 +104,8 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 content = resultSet.getString(2);
                 created = resultSet.getLong(3);
                 updated = resultSet.getLong(4);
-                Label label = resultSet.getObject(5, Label.class);
+                String name = resultSet.getString(7);
+                Label label = new Label(id, name);
                 labels.add(label);
             }
             return new Post(id, content, created, updated, labels);
@@ -135,7 +137,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Getting all records...");
             statement = connection.createStatement();
 
-            String gettingAllResults = "SELECT id, content, created, updated, name FROM Post LEFT JOIN Label ON Post.id = Label.id";
+            String gettingAllResults = "SELECT * FROM Post LEFT JOIN Label ON Post.label_id = Label.id ORDER BY Post.id ASC";
 
             ResultSet resultSet = statement.executeQuery(gettingAllResults);
 
@@ -144,7 +146,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 String content = resultSet.getString(2);
                 Long created = resultSet.getLong(3);
                 Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(5);
+                String name = resultSet.getString(7);
                 Label label = new Label(id, name);
                 List<Label> labels = new ArrayList<>();
                 labels.add(label);
@@ -176,7 +178,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Getting record...");
             statement = connection.createStatement();
 
-            String updatePost = "SELECT id,content, created, updated, name, FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE id = " + post.getId();
+            String updatePost = "SELECT * FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE post.id = " + post.getId();
 
             ResultSet resultSet = statement.executeQuery(updatePost);
 
@@ -185,7 +187,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 String content = resultSet.getString(2);
                 Long created = resultSet.getLong(3);
                 Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(5);
+                String name = resultSet.getString(7);
                 Label label = new Label(id, name);
                 List<Label> labels = new ArrayList<>();
                 labels.add(label);
@@ -200,7 +202,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 String content = resultSet.getString(2) + "Updated content";
                 Long created = resultSet.getLong(3);
                 Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(5);
+                String name = resultSet.getString(7);
                 Label label = new Label(id, name);
                 List<Label> labels = new ArrayList<>();
                 labels.add(label);
@@ -264,7 +266,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             statement = connection.createStatement();
 
-            String gettingRecords = "SELECT id, content, created, updated, name FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE id = " + aLong;
+            String gettingRecords = "SELECT * FROM Post LEFT JOIN Label ON Post.label_id = Label.id WHERE post.id = " + aLong;
 
             ResultSet resultSet = statement.executeQuery(gettingRecords);
 

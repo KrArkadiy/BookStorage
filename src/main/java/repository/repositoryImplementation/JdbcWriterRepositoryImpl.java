@@ -29,9 +29,10 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Creating table in selected database...");
             statement = connection.createStatement();
 
-            String creatingWriterTable = "CREATE TABLE Writer " +
-                    "id INTEGER NOT NULL" +
-                    "name varchar(255))";
+            String creatingWriterTable = "CREATE TABLE Writer (" +
+                    "id INTEGER NOT NULL, " +
+                    "name varchar(255), " +
+                    "post_id INTEGER)";
 
             statement.executeUpdate(creatingWriterTable);
             System.out.println("Table successfully created...");
@@ -59,8 +60,8 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Inserting information in selected database...");
             statement = connection.createStatement();
 
-            String insertInformationFirst = "INSERT INTO Writer (id, name) VALUES (1, 'FirstWriter')";
-            String insertInformationSecond = "INSERT INTO Writer (id, name) VALUES (2, 'SecondWriter')";
+            String insertInformationFirst = "INSERT INTO Writer (id, name, post_id) VALUES (1, 'FirstWriter', 2)";
+            String insertInformationSecond = "INSERT INTO Writer (id, name, post_id) VALUES (2, 'SecondWriter', 1)";
 
             statement.executeUpdate(insertInformationFirst);
             statement.executeUpdate(insertInformationSecond);
@@ -95,7 +96,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             statement = connection.createStatement();
 
             System.out.println("Getting record...");
-            String gettingWriterById = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id WHERE id = " + aLong;
+            String gettingWriterById = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id WHERE writer.id = " + aLong;
 
             ResultSet resultSet = statement.executeQuery(gettingWriterById);
 
@@ -132,7 +133,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Getting all records...");
             statement = connection.createStatement();
 
-            String gettingAllRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id";
+            String gettingAllRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id";
 
             ResultSet resultSet = statement.executeQuery(gettingAllRecords);
 
@@ -169,7 +170,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Getting record");
             statement = connection.createStatement();
 
-            String updateWriter = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id WHERE id = " + writer.getId();
+            String updateWriter = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id WHERE writer_id = " + writer.getId();
 
             ResultSet resultSet = statement.executeQuery(updateWriter);
 
@@ -247,7 +248,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             statement = connection.createStatement();
 
-            String gettingRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id WHERE id = " + aLong;
+            String gettingRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id WHERE writer.id = " + aLong;
 
             ResultSet resultSet = statement.executeQuery(gettingRecords);
 

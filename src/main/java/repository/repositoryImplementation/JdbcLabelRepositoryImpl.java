@@ -55,8 +55,8 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             System.out.println("Inserting information in selected database...");
             statement = connection.createStatement();
 
-            String insertingInformationFirst = "INSERT INTO Label (name) VALUES ('FirstLabel')";
-            String insertingInformationSecond = "INSERT INTO Label (name) VALUES ('SecondLabel')";
+            String insertingInformationFirst = "INSERT INTO Label (id, name) VALUES (1, 'FirstLabel')";
+            String insertingInformationSecond = "INSERT INTO Label (id, name) VALUES (2, 'SecondLabel')";
 
             statement.executeUpdate(insertingInformationFirst);
             statement.executeUpdate(insertingInformationSecond);

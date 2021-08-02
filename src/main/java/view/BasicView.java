@@ -1,14 +1,16 @@
 package view;
 
+import java.sql.SQLException;
+
 public abstract class BasicView {
 
-    abstract void getById();
+    abstract void getById() throws ClassNotFoundException, SQLException;
 
-    abstract void getAll();
+    abstract void getAll() throws SQLException, ClassNotFoundException;
 
-    abstract void deleteById();
+    abstract void deleteById() throws SQLException, ClassNotFoundException;
 
-    abstract void save();
+    abstract void save() throws SQLException, ClassNotFoundException;
 
-    abstract void update();
+    abstract void update() throws SQLException, ClassNotFoundException;
 }
