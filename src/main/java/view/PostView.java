@@ -14,7 +14,7 @@ public class PostView extends BasicView {
     private final PostController POST_CONTROLLER;
     private final Scanner SCANNER = new Scanner(System.in);
 
-    private final String MENU_MESSAGE = "Choose action on label: \n" +
+    private final String MENU_MESSAGE = "Choose action on post: \n" +
             "1. Get post by ID\n" +
             "2. Get all posts\n" +
             "3. Add new post\n" +
@@ -33,7 +33,10 @@ public class PostView extends BasicView {
         long id = SCANNER.nextInt();
         try {
             Post post = POST_CONTROLLER.getById(id);
-            System.out.println(post.getContent());
+            System.out.println(post.getId() + post.getContent());
+            for(Label label : post.getLabels()){
+                System.out.println(label.getName());
+            }
         } catch (ClassNotFoundException | SQLException exception){
             System.out.println("Error occurred");
         }
@@ -43,7 +46,13 @@ public class PostView extends BasicView {
     void getAll() {
         System.out.println(MENU_MESSAGE);
         try {
-            POST_CONTROLLER.getAll();
+            List<Post> posts = POST_CONTROLLER.getAll();
+            for(Post post : posts){
+                System.out.println(post.getId() + post.getContent());
+                for(Label label : post.getLabels()){
+                    System.out.println(label.getName());
+                }
+            }
             System.out.println("Operation ended successfully");
         } catch (ClassNotFoundException | SQLException exception){
             System.out.println("Error occurred during operation");

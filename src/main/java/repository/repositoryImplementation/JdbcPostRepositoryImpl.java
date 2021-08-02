@@ -126,6 +126,12 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Statement statement = null;
 
         List<Post> posts = new ArrayList<>();
+        List<Label> labels = new ArrayList<>();
+        Integer id;
+        String content;
+        Long created;
+        Long updated;
+        String name;
 
         try {
             System.out.println("Registering JDBC driver...");
@@ -142,15 +148,14 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             ResultSet resultSet = statement.executeQuery(gettingAllResults);
 
             while (resultSet.next()) {
-                Integer id = resultSet.getInt(1);
-                String content = resultSet.getString(2);
-                Long created = resultSet.getLong(3);
-                Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(7);
+                id = resultSet.getInt(1);
+                content = resultSet.getString(2);
+                created = resultSet.getLong(3);
+                updated = resultSet.getLong(4);
+                name = resultSet.getString(7);
                 Label label = new Label(id, name);
-                List<Label> labels = new ArrayList<>();
                 labels.add(label);
-                posts.add(new Post(id, content, created, updated, labels));
+                posts.add(new Post(id, content,created, updated, labels));
             }
             return posts;
         } finally {

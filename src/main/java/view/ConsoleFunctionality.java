@@ -25,23 +25,16 @@ public class ConsoleFunctionality {
     BasicView writerView = new WriterView(writerController);
 
     public void run() throws ClassNotFoundException, SQLException {
-        boolean isExit = false;
-        while(!isExit){
-            System.out.println(OPTIONS);
-            int option = SCANNER.nextInt();
-            if(option == 1){
-                labelView.show();
-                continue;
-            } else if(option == 2){
-                writerView.show();
-                continue;
-            } else if(option == 3){
-                postView.show();
-                continue;
-            } else if(option == 4){
-                isExit = true;
-                break;
-            }
+        System.out.println(OPTIONS);
+        int option = SCANNER.nextInt();
+        if (option == 1) {
+            labelView.show();
+        } else if (option == 2) {
+            writerView.show();
+        } else if (option == 3) {
+            postView.show();
+        } else if (option == 4) {
+            return;
         }
     }
 }

@@ -15,7 +15,7 @@ public class WriterView extends BasicView {
 
     private final Scanner SCANNER = new Scanner(System.in);
 
-    private final String MENU_MESSAGE = "Choose action on label: \n" +
+    private final String MENU_MESSAGE = "Choose action on writer: \n" +
             "1. Get writer by ID\n" +
             "2. Get all writers\n" +
             "3. Add new writer\n" +

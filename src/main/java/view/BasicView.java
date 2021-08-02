@@ -18,23 +18,20 @@ public abstract class BasicView {
     abstract void update() throws SQLException, ClassNotFoundException;
 
     public void show() throws ClassNotFoundException, SQLException {
-        boolean isExit = false;
         int option = sc.nextInt();
-        while (!isExit) {
-            if (option == 1) {
-                getById();
-            } else if(option == 2){
-                getAll();
-            } else if(option == 3){
-                save();
-            } else if(option == 4){
-                update();
-            } else if(option == 5){
-                deleteById();
-            } else {
-                isExit = true;
-                return;
-            }
+        if (option == 1) {
+            getById();
+        } else if (option == 2) {
+            getAll();
+        } else if (option == 3) {
+            save();
+        } else if (option == 4) {
+            update();
+        } else if (option == 5) {
+            deleteById();
+        } else {
+            return;
         }
     }
 }
+
