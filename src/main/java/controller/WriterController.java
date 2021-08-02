@@ -1,6 +1,5 @@
 package controller;
 
-import liquibase.pro.packaged.C;
 import model.Writer;
 import repository.WriterRepository;
 import repository.repositoryImplementation.JdbcWriterRepositoryImpl;

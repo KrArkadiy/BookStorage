@@ -1,7 +1,6 @@
 package view;
 
 import controller.WriterController;
-import liquibase.pro.packaged.W;
 import model.Post;
 import model.Writer;
 

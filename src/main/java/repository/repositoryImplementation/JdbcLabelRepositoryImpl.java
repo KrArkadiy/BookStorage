@@ -1,7 +1,5 @@
 package repository.repositoryImplementation;
 
-import liquibase.pro.packaged.D;
-import liquibase.pro.packaged.J;
 import model.Label;
 import repository.LabelRepository;
 import utility.JdbcTemplate;

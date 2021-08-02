@@ -1,14 +1,10 @@
 package repository.repositoryImplementation;
 
-import liquibase.pro.packaged.A;
-import liquibase.pro.packaged.C;
-import liquibase.pro.packaged.J;
 import model.Post;
 import model.Writer;
 import repository.WriterRepository;
 import utility.JdbcTemplate;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
