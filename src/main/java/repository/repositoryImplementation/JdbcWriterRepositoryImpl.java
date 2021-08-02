@@ -1,5 +1,7 @@
 package repository.repositoryImplementation;
 
+import liquibase.pro.packaged.W;
+import model.Label;
 import model.Post;
 import model.Writer;
 import repository.WriterRepository;
@@ -81,6 +83,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Integer id = 0;
         String name = "";
         List<Post> posts = new ArrayList<>();
+        List<Label> labels = new ArrayList<>();
 
         try {
             System.out.println("Registering JDBC driver...");
@@ -92,14 +95,21 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             statement = connection.createStatement();
 
             System.out.println("Getting record...");
-            String gettingWriterById = "SELECT * FROM Writer LEFT JOIN Post ON Writer.id = Post.id WHERE writer.id = " + aLong;
-
+            String gettingWriterById = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + aLong;
             ResultSet resultSet = statement.executeQuery(gettingWriterById);
 
             while (resultSet.next()) {
                 id = resultSet.getInt(1);
                 name = resultSet.getString(2);
-                Post post = resultSet.getObject(3, Post.class);
+                Integer postId = resultSet.getInt(4);
+                String postContent = resultSet.getString(5);
+                Long created = resultSet.getLong(6);
+                Long updated = resultSet.getLong(7);
+                Integer labelId = resultSet.getInt(9);
+                String labelName = resultSet.getString(10);
+                Label label = new Label(labelId, labelName);
+                labels.add(label);
+                Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
             }
             return new Writer(id, name, posts);
@@ -119,6 +129,11 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Statement statement = null;
 
         List<Writer> writers = new ArrayList<>();
+        Integer id;
+        String name;
+        List<Post> posts = new ArrayList<>();
+        List<Label> labels = new ArrayList<>();
+
         try {
             System.out.println("Registering JDBC driver...");
             Class.forName(JdbcTemplate.getJdbcDriver());
@@ -129,15 +144,22 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Getting all records...");
             statement = connection.createStatement();
 
-            String gettingAllRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id";
+            String gettingAllRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id";
 
             ResultSet resultSet = statement.executeQuery(gettingAllRecords);
 
             while (resultSet.next()) {
-                List<Post> posts = new ArrayList<>();
-                Integer id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                Post post = resultSet.getObject(3, Post.class);
+                id = resultSet.getInt(1);
+                name = resultSet.getString(2);
+                Integer postId = resultSet.getInt(4);
+                String postContent = resultSet.getString(5);
+                Long created = resultSet.getLong(6);
+                Long updated = resultSet.getLong(7);
+                Integer labelId = resultSet.getInt(9);
+                String labelName = resultSet.getString(10);
+                Label label = new Label(labelId, labelName);
+                labels.add(label);
+                Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
                 writers.add(new Writer(id, name, posts));
             }
@@ -156,6 +178,13 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
     public Writer update(Writer writer) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
+
+        Integer id = 0;
+        String name = "";
+        List<Post> posts = new ArrayList<>();
+        List<Label> labels = new ArrayList<>();
+        Writer updatedWriter;
+
         try {
             System.out.println("Registering JDBC driver...");
             Class.forName(JdbcTemplate.getJdbcDriver());
@@ -166,15 +195,22 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Getting record");
             statement = connection.createStatement();
 
-            String updateWriter = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id WHERE writer_id = " + writer.getId();
+            String updateWriter = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + writer.getId();
 
             ResultSet resultSet = statement.executeQuery(updateWriter);
 
             while (resultSet.next()) {
-                List<Post> posts = new ArrayList<>();
-                Integer id = resultSet.getInt(1);
-                String name = resultSet.getString(2);
-                Post post = resultSet.getObject(3, Post.class);
+                id = resultSet.getInt(1);
+                name = resultSet.getString(2);
+                Integer postId = resultSet.getInt(4);
+                String postContent = resultSet.getString(5);
+                Long created = resultSet.getLong(6);
+                Long updated = resultSet.getLong(7);
+                Integer labelId = resultSet.getInt(9);
+                String labelName = resultSet.getString(10);
+                Label label = new Label(labelId, labelName);
+                labels.add(label);
+                Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
             }
 
@@ -183,13 +219,21 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             resultSet = statement.executeQuery(updateWriter);
             while (resultSet.next()) {
-                List<Post> posts = new ArrayList<>();
-                Integer id = resultSet.getInt(1);
-                String name = resultSet.getString(2) + "Updated";
-                Post post = resultSet.getObject(3, Post.class);
+                id = resultSet.getInt(1);
+                name = resultSet.getString(2);
+                Integer postId = resultSet.getInt(4);
+                String postContent = resultSet.getString(5);
+                Long created = resultSet.getLong(6);
+                Long updated = resultSet.getLong(7);
+                Integer labelId = resultSet.getInt(9);
+                String labelName = resultSet.getString(10);
+                Label label = new Label(labelId, labelName);
+                labels.add(label);
+                Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
             }
-            return writer;
+            updatedWriter = new Writer(id, name, posts);
+            return updatedWriter;
         } finally {
             if (statement != null) {
                 statement.close();
@@ -244,7 +288,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             statement = connection.createStatement();
 
-            String gettingRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id WHERE writer.id = " + aLong;
+            String gettingRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + aLong;
 
             ResultSet resultSet = statement.executeQuery(gettingRecords);
 

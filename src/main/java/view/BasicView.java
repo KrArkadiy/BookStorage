@@ -7,17 +7,26 @@ public abstract class BasicView {
 
     private final Scanner sc = new Scanner(System.in);
 
-    abstract void getById() throws ClassNotFoundException, SQLException;
+    private final String MENU_MESSAGE = "Choose action on entity: \n" +
+            "1. Get record by ID\n" +
+            "2. Get all records\n" +
+            "3. Add new record\n" +
+            "4. Edit existing record\n" +
+            "5. Delete record\n" +
+            "6. Exit";
 
-    abstract void getAll() throws SQLException, ClassNotFoundException;
+    abstract void getById();
 
-    abstract void deleteById() throws SQLException, ClassNotFoundException;
+    abstract void getAll();
 
-    abstract void save() throws SQLException, ClassNotFoundException;
+    abstract void deleteById();
 
-    abstract void update() throws SQLException, ClassNotFoundException;
+    abstract void save();
 
-    public void show() throws ClassNotFoundException, SQLException {
+    abstract void update();
+
+    public void show() {
+        System.out.println(MENU_MESSAGE);
         int option = sc.nextInt();
         if (option == 1) {
             getById();

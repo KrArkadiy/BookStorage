@@ -1,9 +1,11 @@
 package view;
 
 import controller.LabelController;
+import liquibase.pro.packaged.L;
 import model.Label;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class LabelView extends BasicView {
@@ -12,21 +14,12 @@ public class LabelView extends BasicView {
 
     private final Scanner SCANNER = new Scanner(System.in);
 
-    private final String MENU_MESSAGE = "Choose action on label: \n" +
-            "1. Get label by ID\n" +
-            "2. Get all labels\n" +
-            "3. Add new label\n" +
-            "4. Edit existing label\n" +
-            "5. Delete label\n" +
-            "6. Exit";
-
     public LabelView(LabelController labelController) {
         this.LABEL_CONTROLLER = labelController;
     }
 
     @Override
     void getById() {
-        System.out.println(MENU_MESSAGE);
         try {
             System.out.println("Enter id of necessary label");
             long id = SCANNER.nextInt();
@@ -39,9 +32,9 @@ public class LabelView extends BasicView {
 
     @Override
     void getAll() {
-        System.out.println(MENU_MESSAGE);
         try {
-            System.out.println(LABEL_CONTROLLER.getAll());
+            List<Label> labels = (LABEL_CONTROLLER.getAll());
+            labels.forEach(x-> System.out.println(x.getName()));
             System.out.println("Operation ended successfully");
         } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred during operation");
@@ -50,7 +43,6 @@ public class LabelView extends BasicView {
 
     @Override
     void deleteById() {
-        System.out.println(MENU_MESSAGE);
         System.out.println("Enter id of label you want to delete");
         long id = SCANNER.nextInt();
         try {
@@ -63,7 +55,6 @@ public class LabelView extends BasicView {
 
     @Override
     void save() {
-        System.out.println(MENU_MESSAGE);
         System.out.println("Enter name of the label");
         String name = SCANNER.nextLine();
         System.out.println("Enter label's id");
@@ -77,13 +68,14 @@ public class LabelView extends BasicView {
 
     @Override
     void update() {
-        System.out.println(MENU_MESSAGE);
         System.out.println("Enter name of the label");
         String name = SCANNER.nextLine();
         System.out.println("Enter label's id");
         int id = SCANNER.nextInt();
         try {
-            LABEL_CONTROLLER.update(new Label(id, name));
+            Label updateLabel = new Label(id, name);
+            LABEL_CONTROLLER.update(updateLabel);
+            System.out.println(updateLabel.getName());
         } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred during operation");
         }

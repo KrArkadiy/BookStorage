@@ -126,12 +126,6 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Statement statement = null;
 
         List<Post> posts = new ArrayList<>();
-        List<Label> labels = new ArrayList<>();
-        Integer id;
-        String content;
-        Long created;
-        Long updated;
-        String name;
 
         try {
             System.out.println("Registering JDBC driver...");
@@ -148,12 +142,13 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             ResultSet resultSet = statement.executeQuery(gettingAllResults);
 
             while (resultSet.next()) {
-                id = resultSet.getInt(1);
-                content = resultSet.getString(2);
-                created = resultSet.getLong(3);
-                updated = resultSet.getLong(4);
-                name = resultSet.getString(7);
+                Integer id = resultSet.getInt(1);
+                String content = resultSet.getString(2);
+                Long created = resultSet.getLong(3);
+                Long updated = resultSet.getLong(4);
+                String name = resultSet.getString(7);
                 Label label = new Label(id, name);
+                List<Label> labels = new ArrayList<>();
                 labels.add(label);
                 posts.add(new Post(id, content,created, updated, labels));
             }
@@ -173,6 +168,14 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Connection connection = null;
         Statement statement = null;
 
+        Post updatedPost;
+        Integer id = 0;
+        String content = "";
+        Long created = 0L;
+        Long updated = 0L;
+        String name;
+        List<Label> labels = new ArrayList<>();
+
         try {
             System.out.println("Registering JDBC driver...");
             Class.forName(JdbcTemplate.getJdbcDriver());
@@ -183,18 +186,17 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Getting record...");
             statement = connection.createStatement();
 
-            String updatePost = "SELECT * FROM Post LEFT JOIN Label ON Post.id = Label.id WHERE post.id = " + post.getId();
+            String updatePost = "SELECT * FROM Post LEFT JOIN Label ON Post.lable_id = Label.id WHERE post.id = " + post.getId();
 
             ResultSet resultSet = statement.executeQuery(updatePost);
 
             while (resultSet.next()) {
-                Integer id = resultSet.getInt(1);
-                String content = resultSet.getString(2);
-                Long created = resultSet.getLong(3);
-                Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(7);
+                id = resultSet.getInt(1);
+                content = resultSet.getString(2);
+                created = resultSet.getLong(3);
+                updated = resultSet.getLong(4);
+                name = resultSet.getString(7);
                 Label label = new Label(id, name);
-                List<Label> labels = new ArrayList<>();
                 labels.add(label);
             }
 
@@ -203,16 +205,16 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             resultSet = statement.executeQuery(updatePost);
             while (resultSet.next()) {
-                Integer id = resultSet.getInt(1);
-                String content = resultSet.getString(2) + "Updated content";
-                Long created = resultSet.getLong(3);
-                Long updated = resultSet.getLong(4);
-                String name = resultSet.getString(7);
+                id = resultSet.getInt(1);
+                content = resultSet.getString(2);
+                created = resultSet.getLong(3);
+                updated = resultSet.getLong(4);
+                name = resultSet.getString(7);
                 Label label = new Label(id, name);
-                List<Label> labels = new ArrayList<>();
                 labels.add(label);
             }
-            return post;
+            updatedPost = new Post(id, content, created, updated, labels);
+            return updatedPost;
         } finally {
             if (statement != null) {
                 statement.close();
@@ -239,7 +241,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             System.out.println("Creating new Post");
             statement = connection.createStatement();
 
-            String creatingNewPost = "INSERT INTO Post (id, content, created, updated) VALUES (" + post.getId()
+            String creatingNewPost = "INSERT INTO Post (id, content, created, updated, lable_id) VALUES (" + post.getId()
                     + ", " + post.getContent() + ", " + post.getCreated() + ", " + post.getUpdated() + ")";
             String creatingNewLabelForPost = "INSERT INTO Label (id, name) VALUES (" + post.getId() + ", "
                     + post.getLabels() + ")";
