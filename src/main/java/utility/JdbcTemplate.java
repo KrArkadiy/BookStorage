@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class JdbcTemplate {
 
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/mysql";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/bookstorage";
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 

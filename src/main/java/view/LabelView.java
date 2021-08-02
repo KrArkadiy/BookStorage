@@ -1,6 +1,7 @@
 package view;
 
 import controller.LabelController;
+import liquibase.Liquibase;
 import model.Label;
 
 import java.sql.SQLException;
@@ -8,41 +9,84 @@ import java.util.Scanner;
 
 public class LabelView extends BasicView {
 
-    LabelController labelController;
-    private final Scanner sc = new Scanner(System.in);
+    private LabelController labelController;
+
+    private Scanner sc = new Scanner(System.in);
+
+    private final String MENU_MESSAGE = "Choose action on label: \n" +
+            "1. Get label by ID\n" +
+            "2. Get all labels\n" +
+            "3. Add new label\n" +
+            "4. Edit existing label\n" +
+            "5. Delete label\n" +
+            "6. Exit";
 
     public LabelView(LabelController labelController) {
         this.labelController = labelController;
     }
 
     @Override
-    void getById() throws ClassNotFoundException, SQLException {
+    void getById() {
+        System.out.println(MENU_MESSAGE);
+        try {
+            System.out.println("Enter id of necessary label");
+            long id = sc.nextInt();
+            Label label = labelController.getById(id);
+            System.out.println(label.getName());
+        } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("Error occurred during operation");
+        }
+    }
+
+    @Override
+    void getAll() {
+        System.out.println(MENU_MESSAGE);
+        try {
+            System.out.println(labelController.getAll());
+            System.out.println("Operation ended successfully");
+        } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("Error occurred during operation");
+        }
+    }
+
+    @Override
+    void deleteById() {
+        System.out.println(MENU_MESSAGE);
+        System.out.println("Enter id of label you want to delete");
         long id = sc.nextInt();
-        labelController.getById(id);
+        try {
+            labelController.deleteById(id);
+            System.out.println("Operation ended successfully");
+        } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("Error occurred during operation");
+        }
     }
 
     @Override
-    void getAll() throws SQLException, ClassNotFoundException {
-        labelController.getAll();
-    }
-
-    @Override
-    void deleteById() throws SQLException, ClassNotFoundException {
-        long id = sc.nextInt();
-        labelController.deleteById(id);
-    }
-
-    @Override
-    void save() throws SQLException, ClassNotFoundException {
+    void save() {
+        System.out.println(MENU_MESSAGE);
+        System.out.println("Enter name of the label");
         String name = sc.nextLine();
+        System.out.println("Enter label's id");
         int id = sc.nextInt();
-        labelController.save(new Label(id, name));
+        try {
+            labelController.save(new Label(id, name));
+        } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("Error occurred during operation");
+        }
     }
 
     @Override
-    void update() throws SQLException, ClassNotFoundException {
+    void update() {
+        System.out.println(MENU_MESSAGE);
+        System.out.println("Enter name of the label");
         String name = sc.nextLine();
-        int id = Integer.parseInt(name.substring(0, 1));
-        labelController.update(new Label(id, name));
+        System.out.println("Enter label's id");
+        int id = sc.nextInt();
+        try {
+            labelController.update(new Label(id, name));
+        } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("Error occurred during operation");
+        }
     }
 }
