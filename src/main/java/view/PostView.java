@@ -71,9 +71,16 @@ public class PostView extends BasicView {
         long updated = SCANNER.nextInt();
         System.out.println("Enter number of creation");
         long created = SCANNER.nextInt();
+        System.out.println("Enter label id for this post");
+        int labelId = SCANNER.nextInt();
         List<Label> labels = new ArrayList<>();
         try {
-            POST_CONTROLLER.save(new Post(id, content, created, updated, labels));
+            Post newPost = new Post(id, content, created, updated, labels);
+            POST_CONTROLLER.save(newPost);
+            System.out.println(newPost.getId() + " "
+                    + newPost.getContent() + " "
+                    + newPost.getCreated() + " "
+                    + newPost.getUpdated());
             System.out.println("Operation ended successfully");
         } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");

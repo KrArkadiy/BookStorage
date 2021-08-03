@@ -10,7 +10,7 @@ import java.util.List;
 
 public class JdbcLabelRepositoryImpl implements LabelRepository {
 
-    public void creatingLabelTableInDatabase() throws ClassNotFoundException, SQLException {
+/*    public void creatingLabelTableInDatabase() throws ClassNotFoundException, SQLException {
 
         Connection connection = null;
         Statement statement = null;
@@ -68,13 +68,13 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
                 statement.close();
             }
         }
-    }
+    }*/
 
     @Override
     public Label getById(Long aLong) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
-        Integer id = 0;
+        int id = 0;
         String name = "";
 
         try {
@@ -112,7 +112,7 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
 
         List<Label> labelsFromDatabase = new ArrayList<>();
 
-        Integer id;
+        int id;
         String name;
 
         try {
@@ -150,9 +150,6 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
         Connection connection = null;
         Statement statement = null;
 
-        Integer id;
-        String name;
-
         try {
             System.out.println("Registering JDBC driver...");
             Class.forName(JdbcTemplate.getJdbcDriver());
@@ -168,8 +165,8 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             ResultSet resultSet = statement.executeQuery(updatingLabel);
 
             while (resultSet.next()) {
-                id = resultSet.getInt(1);
-                name = resultSet.getString(2);
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
             }
 
             System.out.println("Changing name of the label..");
@@ -178,8 +175,8 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             resultSet = statement.executeQuery(updatingLabel);
 
             while (resultSet.next()) {
-                id = resultSet.getInt(1);
-                name = resultSet.getString(2) + "Updated";
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2) + "Updated";
             }
             return label;
         } finally {
@@ -225,12 +222,10 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
     }
 
     @Override
-    public void deleteById(Long aLong) throws ClassNotFoundException, SQLException{
+    public void deleteById(Long aLong) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
 
-        Integer id = 0;
-        String name = "";
 
         try {
             System.out.println("Registering JDBC driver...");
@@ -247,21 +242,23 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
             ResultSet resultSet = statement.executeQuery(gettingRecords);
 
             while (resultSet.next()) {
-                id = resultSet.getInt(1);
-                name = resultSet.getString(2);
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
             }
 
             System.out.println("Deleting label with id " + aLong);
             statement = connection.createStatement();
 
-            String deletingLabel = "DELETE FROM Label WHERE id = " + aLong;
+            String removingSafeMode = "SET_SAFE_UPDATES = 0";
+            statement.executeUpdate(removingSafeMode);
 
+            String deletingLabel = "DELETE FROM Label WHERE id = " + aLong;
             statement.executeUpdate(deletingLabel);
         } finally {
-            if(statement != null){
+            if (statement != null) {
                 statement.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }

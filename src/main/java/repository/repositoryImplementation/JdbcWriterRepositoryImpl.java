@@ -1,6 +1,5 @@
 package repository.repositoryImplementation;
 
-import liquibase.pro.packaged.W;
 import model.Label;
 import model.Post;
 import model.Writer;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class JdbcWriterRepositoryImpl implements WriterRepository {
 
-    public void creatingWriterTableInDatabase() throws ClassNotFoundException, SQLException {
+/*    public void creatingWriterTableInDatabase() throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
 
@@ -73,14 +72,14 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 connection.close();
             }
         }
-    }
+    }*/
 
     @Override
     public Writer getById(Long aLong) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
 
-        Integer id = 0;
+        int id = 0;
         String name = "";
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
@@ -129,7 +128,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Statement statement = null;
 
         List<Writer> writers = new ArrayList<>();
-        Integer id;
+        int id;
         String name;
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
@@ -179,7 +178,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Connection connection = null;
         Statement statement = null;
 
-        Integer id = 0;
+        int id = 0;
         String name = "";
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
@@ -254,24 +253,22 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             Class.forName(JdbcTemplate.getJdbcDriver());
 
             System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(),JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
+            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
 
             System.out.println("Creating new Writer...");
             statement = connection.createStatement();
 
-            String creatingNewWriter = "INSERT INTO Writer (id, name) VALUES (" + writer.getId() + ", " + writer.getName() + ")";
-            String creatingNewPostForWriter = "INSERT INTO Post (id,content,created, updated) VALUES (" + writer.getPosts() + ")";
+            String creatingNewWriter = "INSERT INTO Writer (id, name, post_id) VALUES (" + writer.getId() + ", " + "'" + writer.getName() + "'" + ", " + writer.getId() + ")";
 
             statement.executeUpdate(creatingNewWriter);
-            statement.executeUpdate(creatingNewPostForWriter);
 
             System.out.println("New writer added to database");
             return writer;
         } finally {
-            if(statement != null){
+            if (statement != null) {
                 statement.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -282,7 +279,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         Connection connection = null;
         Statement statement = null;
 
-        try{
+        try {
             Class.forName(JdbcTemplate.getJdbcDriver());
             connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
 
@@ -292,7 +289,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             ResultSet resultSet = statement.executeQuery(gettingRecords);
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Integer id = resultSet.getInt(1);
                 String name = resultSet.getString(2);
                 List<Post> posts = new ArrayList<>();
@@ -304,13 +301,13 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             statement = connection.createStatement();
 
-            String deletingWriter = "DELETE FROM Writer WHERE id = " + aLong;
+            String deletingWriter = "DELETE FROM Writer WHERE writer.id = " + aLong;
             statement.executeUpdate(deletingWriter);
         } finally {
-            if(statement != null){
+            if (statement != null) {
                 statement.close();
             }
-            if(connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }

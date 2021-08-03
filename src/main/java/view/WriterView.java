@@ -1,7 +1,6 @@
 package view;
 
 import controller.WriterController;
-import liquibase.pro.packaged.W;
 import model.Post;
 import model.Writer;
 
@@ -27,7 +26,7 @@ public class WriterView extends BasicView {
         try {
             Writer writer = WRITER_CONTROLLER.getById(id);
             System.out.println(writer.getName());
-        } catch (ClassNotFoundException | SQLException exception){
+        } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");
         }
     }
@@ -36,9 +35,9 @@ public class WriterView extends BasicView {
     void getAll() {
         try {
             List<Writer> writers = WRITER_CONTROLLER.getAll();
-            writers.stream().forEach(x-> System.out.println(x.getName()));
+            writers.forEach(x -> System.out.println(x.getName()));
             System.out.println("Operation ended successfully");
-        } catch (ClassNotFoundException | SQLException exception){
+        } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");
         }
     }
@@ -50,7 +49,7 @@ public class WriterView extends BasicView {
         try {
             WRITER_CONTROLLER.deleteById(id);
             System.out.println("Operation ended successfully");
-        }  catch (ClassNotFoundException | SQLException exception) {
+        } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");
         }
     }
@@ -59,12 +58,17 @@ public class WriterView extends BasicView {
     void save() {
         System.out.println("Enter name of the new writer");
         String name = SCANNER.nextLine();
+        System.out.println("Enter post id for this writer");
+        int postId = SCANNER.nextInt();
         System.out.println("Enter id of the new writer");
         int id = SCANNER.nextInt();
         List<Post> posts = new ArrayList<>();
         try {
-            WRITER_CONTROLLER.save(new Writer(id, name, posts));
-        } catch (ClassNotFoundException | SQLException exception){
+            Writer newWriter = new Writer(id, name, posts);
+            WRITER_CONTROLLER.save(newWriter);
+            System.out.println(newWriter.getId() + " "
+                    + newWriter.getName());
+        } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");
         }
     }
@@ -80,8 +84,8 @@ public class WriterView extends BasicView {
             Writer updatedWriter = new Writer(id, name, posts);
             WRITER_CONTROLLER.update(updatedWriter);
             System.out.print(updatedWriter.getId() + " " + updatedWriter.getName());
-            posts.forEach(x-> System.out.println(x.getContent()));
-        } catch (ClassNotFoundException | SQLException exception){
+            posts.forEach(x -> System.out.println(x.getContent()));
+        } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("Error occurred");
         }
     }

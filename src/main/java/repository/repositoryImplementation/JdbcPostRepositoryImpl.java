@@ -11,7 +11,7 @@ import java.util.List;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
 
-    public void creatingPostTableInDatabase() throws ClassNotFoundException, SQLException {
+    /*public void creatingPostTableInDatabase() throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
 
@@ -73,17 +73,17 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 connection.close();
             }
         }
-    }
+    }*/
 
     @Override
     public Post getById(Long aLong) throws ClassNotFoundException, SQLException {
         Connection connection = null;
         Statement statement = null;
 
-        Integer id = 0;
+        int id = 0;
         String content = "";
-        Long created = 0L;
-        Long updated = 0L;
+        long created = 0L;
+        long updated = 0L;
         List<Label> labels = new ArrayList<>();
 
         try {
@@ -150,7 +150,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
                 Label label = new Label(id, name);
                 List<Label> labels = new ArrayList<>();
                 labels.add(label);
-                posts.add(new Post(id, content,created, updated, labels));
+                posts.add(new Post(id, content, created, updated, labels));
             }
             return posts;
         } finally {
@@ -169,10 +169,10 @@ public class JdbcPostRepositoryImpl implements PostRepository {
         Statement statement = null;
 
         Post updatedPost;
-        Integer id = 0;
+        int id = 0;
         String content = "";
-        Long created = 0L;
-        Long updated = 0L;
+        long created = 0L;
+        long updated = 0L;
         String name;
         List<Label> labels = new ArrayList<>();
 
@@ -230,6 +230,7 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
         Connection connection = null;
         Statement statement = null;
+        List<Label> labels = post.getLabels();
 
         try {
             System.out.println("Registering JDBC driver...");
@@ -242,12 +243,9 @@ public class JdbcPostRepositoryImpl implements PostRepository {
             statement = connection.createStatement();
 
             String creatingNewPost = "INSERT INTO Post (id, content, created, updated, lable_id) VALUES (" + post.getId()
-                    + ", " + post.getContent() + ", " + post.getCreated() + ", " + post.getUpdated() + ")";
-            String creatingNewLabelForPost = "INSERT INTO Label (id, name) VALUES (" + post.getId() + ", "
-                    + post.getLabels() + ")";
+                    + ", " + "'" + post.getContent() + "'" + ", " + post.getCreated() + ", " + post.getUpdated() + ", " + post.getId() + ")";
 
             statement.executeUpdate(creatingNewPost);
-            statement.executeUpdate(creatingNewLabelForPost);
 
             System.out.println("New post added to database");
             return post;
@@ -292,8 +290,10 @@ public class JdbcPostRepositoryImpl implements PostRepository {
 
             statement = connection.createStatement();
 
-            String deletingLabel = "DELETE FROM Post WHERE id = " + aLong;
+            String removingSafeMode = "SET_SAFE_UPDATES = 0";
+            statement.executeUpdate(removingSafeMode);
 
+            String deletingLabel = "DELETE FROM Post WHERE id = " + aLong;
             statement.executeUpdate(deletingLabel);
         } finally {
             if (statement != null) {
