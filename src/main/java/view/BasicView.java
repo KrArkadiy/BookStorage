@@ -1,6 +1,5 @@
 package view;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public abstract class BasicView {

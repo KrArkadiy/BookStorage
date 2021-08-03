@@ -1,7 +1,6 @@
 package view;
 
 import controller.LabelController;
-import liquibase.pro.packaged.L;
 import model.Label;
 
 import java.sql.SQLException;
