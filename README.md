@@ -24,4 +24,4 @@
 
 <hr>
 
-Технологии: Java, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito.
+Технологии: JavaSE8, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito.
