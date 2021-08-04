@@ -1,12 +1,27 @@
 # BookStorage
 
-Необходимо реализовать консольное CRUD приложение, которое взаимодействует с БД и позволяет выполнять все CRUD операции над сущностями:
-Writer(id, name, List<Post> posts)
-Post(id, content, Long created, Long updated, List<Label> labels)
-Label(id, name)
-PostStatus (enum ACTIVE, DELETED)
+Передо мной стояла задача по реализации консольного CRUD приложения, которое взаимодействует с БД и позволяет выполнять все CRUD операции над сущностями:
+<p>Writer(id, name, List<Post> posts)</p>
+<p>Post(id, content, Long created, Long updated, List<Label> labels)</p>
+<p>Label(id, name)</p>
+<p>PostStatus (enum ACTIVE, DELETED)</p>
+<hr>
 
-model - POJO классы
-repository - классы, реализующие доступ к текстовым файлам
-controller - обработка запросов от пользователя
-view - все данные, необходимые для работы с консолью
+Слои:
+<p>model - POJO классы</p>
+<p>repository - классы, реализующие доступ к текстовым файлам</p>
+<p>controller - обработка запросов от пользователя</p>
+<p>view - все данные, необходимые для работы с консолью</p>
+
+<hr>
+Требования к приложению:
+<ol>
+  <li>Придерживаться шаблона MVC (пакеты model, repository, serviece, controller, view)</li>
+  <li>Для миграции БД использовать Liquibase</li>
+  <li>Сервисный слой приложения должен быть покрыт юнит тестами (junit + mockito)</li>
+  <li>Для импорта библиотек использовать Maven</li>
+</ol>
+
+<hr>
+
+Технологии: Java, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito.
