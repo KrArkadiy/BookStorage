@@ -1,11 +1,11 @@
 package controller;
 
+import liquibase.pro.packaged.L;
 import model.Label;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import repository.LabelRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,21 +16,18 @@ import static org.mockito.Mockito.*;
 class LabelControllerTest {
 
     private final LabelRepository labelRepositoryMock = Mockito.mock(LabelRepository.class);
+    private final LabelController labelController = new LabelController(labelRepositoryMock);
 
     @Test
     void givenListOfLabels_whenRun_thenEqualListOfLabelsReturned() {
         List<Label> labels = new ArrayList<>();
         labels.add(new Label(1, "First Label"));
         labels.add(new Label(2, "Second Label"));
-        try {
-            when(labelRepositoryMock.getAll()).thenReturn(labels);
+        when(labelController.getAll()).thenReturn(labels);
 
-            List<Label> testLabels = labelRepositoryMock.getAll();
+        List<Label> testLabels = labelController.getAll();
 
-            assertEquals(labels, testLabels);
-        } catch (ClassNotFoundException | SQLException exception){
-            System.out.println("Error occurred");
-        }
+        assertEquals(labels, testLabels);
     }
 
     @Test
@@ -38,66 +35,53 @@ class LabelControllerTest {
         List<Label> labels = new ArrayList<>();
         labels.add(new Label(1, "First Label"));
         labels.add(new Label(2, "Second Label"));
-        try{
-            when(labelRepositoryMock.getById(1L)).thenReturn(labels.get(0));
-            when(labelRepositoryMock.getById(2L)).thenReturn(labels.get(1));
 
-            Label testLabel = labelRepositoryMock.getById(1L);
-            Label testLabel2 = labelRepositoryMock.getById(2L);
+        when(labelController.getById(1L)).thenReturn(labels.get(0));
+        when(labelController.getById(2L)).thenReturn(labels.get(1));
 
-            assertEquals("First Label", testLabel.getName());
-            assertEquals("Second Label", testLabel2.getName());
-        } catch (ClassNotFoundException | SQLException exception){
-            System.out.println("Error occurred");
-        }
+        Label testLabel = labelController.getById(1L);
+        Label testLabel2 = labelController.getById(2L);
+
+        assertEquals("First Label", testLabel.getName());
+        assertEquals("Second Label", testLabel2.getName());
     }
 
     @Test
     void givenNewLabel_whenSave_thenReturnNewLabel() {
+        LabelController labelController = Mockito.mock(LabelController.class);
         List<Label> labels = new ArrayList<>();
         labels.add(new Label(1, "First Label"));
         labels.add(new Label(2, "Second Label"));
         Label newLabel = new Label(3, "Third Label");
-        try{
-            when(labelRepositoryMock.save(newLabel)).thenReturn(newLabel);
+        doNothing().when(labelController).save(isA(Label.class));
 
-            labels.add(newLabel);
+        labelController.save(newLabel);
 
-            assertEquals("Third Label", labelRepositoryMock.save(newLabel).getName());
-            assertEquals(newLabel, labels.get(2));
-        } catch (ClassNotFoundException | SQLException exception){
-            System.out.println("Error occurred");
-        }
+        verify(labelController, times(1)).save(newLabel);
     }
 
     @Test
     void givenUpdate_whenUpdate_thenReturnUpdatedLabel() {
+        LabelController labelController = Mockito.mock(LabelController.class);
         List<Label> labels = new ArrayList<>();
         labels.add(new Label(1, "First Label"));
         labels.add(new Label(2, "Second Label"));
         Label newLabel = new Label(3, "Third Label");
-        try{
-            when(labelRepositoryMock.update(newLabel)).thenReturn(newLabel);
 
-            newLabel.setName("Third Label Updated");
+        doNothing().when(labelController).update(newLabel);
 
-            assertEquals("Third Label Updated", labelRepositoryMock.update(newLabel).getName());
-            assertEquals(3, labelRepositoryMock.update(newLabel).getId());
-        } catch (ClassNotFoundException | SQLException exception){
-            System.out.println("Error occurred");
-        }
+        labelController.update(newLabel);
+
+        verify(labelController, times(1)).update(newLabel);
     }
 
     @Test
     void givenId_whenRun_thenVerifyTimesOfInvocations() {
-        try {
-            doNothing().when(labelRepositoryMock).deleteById(isA(Long.class));
+        LabelController labelController = Mockito.mock(LabelController.class);
+        doNothing().when(labelController).deleteById(isA(Long.class));
 
-            labelRepositoryMock.deleteById(1L);
+        labelController.deleteById(1L);
 
-            verify(labelRepositoryMock, times(1)).deleteById(1L);
-        } catch (ClassNotFoundException | SQLException exception){
-            System.out.println("Error occurred");
-        }
+        verify(labelController, times(1)).deleteById(1L);
     }
 }

@@ -3,8 +3,8 @@ package repository.repositoryImplementation;
 import model.Label;
 import model.Post;
 import model.Writer;
+import repository.SQLQueries;
 import repository.WriterRepository;
-import utility.JdbcTemplate;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,18 +13,11 @@ import java.util.List;
 public class JdbcWriterRepositoryImpl implements WriterRepository {
 
 /*    public void creatingWriterTableInDatabase() throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
 
-        try {
-            System.out.println("Registering JDBC driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
-
-            System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            System.out.println("Creating table in selected database...");
-            statement = connection.createStatement();
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
 
             String creatingWriterTable = "CREATE TABLE Writer (" +
                     "id INTEGER NOT NULL, " +
@@ -33,29 +26,17 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             statement.executeUpdate(creatingWriterTable);
             System.out.println("Table successfully created...");
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception){
+            System.out.println("Error occurred " + exception.getMessage());
         }
     }
 
     public void insertInformation() throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
 
-        try {
-            System.out.println("Registering JDBC driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
-
-            System.out.println("Creating connection to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            System.out.println("Inserting information in selected database...");
-            statement = connection.createStatement();
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
 
             String insertInformationFirst = "INSERT INTO Writer (id, name, post_id) VALUES (1, 'FirstWriter', 2)";
             String insertInformationSecond = "INSERT INTO Writer (id, name, post_id) VALUES (2, 'SecondWriter', 1)";
@@ -64,38 +45,26 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             statement.executeUpdate(insertInformationSecond);
 
             System.out.println("Data successfully inserted...");
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception){
+            System.out.println("Error occurred " + exception.getMessage());
         }
     }*/
 
     @Override
-    public Writer getById(Long aLong) throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
+    public Writer getById(Long aLong) {
 
         int id = 0;
         String name = "";
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
 
-        try {
-            System.out.println("Registering JDBC driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
-
-            System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            statement = connection.createStatement();
-
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
             System.out.println("Getting record...");
-            String gettingWriterById = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + aLong;
-            ResultSet resultSet = statement.executeQuery(gettingWriterById);
+
+            ResultSet resultSet = statement.executeQuery(String.format(SQLQueries.GETWRITERBYID.getQuery(), aLong));
 
             while (resultSet.next()) {
                 id = resultSet.getInt(1);
@@ -111,21 +80,14 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
             }
-            return new Writer(id, name, posts);
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception) {
+            System.out.println("Error occurred " + exception.getMessage());
         }
+        return new Writer(id, name, posts);
     }
 
     @Override
-    public List<Writer> getAll() throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
+    public List<Writer> getAll() {
 
         List<Writer> writers = new ArrayList<>();
         int id;
@@ -133,19 +95,12 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
 
-        try {
-            System.out.println("Registering JDBC driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
 
-            System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            System.out.println("Getting all records...");
-            statement = connection.createStatement();
-
-            String gettingAllRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id";
-
-            ResultSet resultSet = statement.executeQuery(gettingAllRecords);
+            ResultSet resultSet = statement.executeQuery(SQLQueries.GETALLWRITERS.getQuery());
 
             while (resultSet.next()) {
                 id = resultSet.getInt(1);
@@ -162,41 +117,26 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 posts.add(post);
                 writers.add(new Writer(id, name, posts));
             }
-            return writers;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception) {
+            System.out.println("Error occurred " + exception.getMessage());
         }
+        return writers;
     }
 
     @Override
-    public Writer update(Writer writer) throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
+    public Writer update(Writer writer) {
 
         int id = 0;
         String name = "";
         List<Post> posts = new ArrayList<>();
         List<Label> labels = new ArrayList<>();
-        Writer updatedWriter;
 
-        try {
-            System.out.println("Registering JDBC driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
 
-            System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            System.out.println("Getting record");
-            statement = connection.createStatement();
-
-            String updateWriter = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + writer.getId();
-
-            ResultSet resultSet = statement.executeQuery(updateWriter);
+            ResultSet resultSet = statement.executeQuery(String.format(SQLQueries.UPDATEWRITER.getQuery(), writer.getId()));
 
             while (resultSet.next()) {
                 id = resultSet.getInt(1);
@@ -216,7 +156,7 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
             System.out.println("Changing content of the writer...");
             System.out.println("Getting updated record...");
 
-            resultSet = statement.executeQuery(updateWriter);
+            resultSet = statement.executeQuery(String.format(SQLQueries.UPDATEWRITER.getQuery(), writer.getId()));
             while (resultSet.next()) {
                 id = resultSet.getInt(1);
                 name = resultSet.getString(2);
@@ -231,63 +171,38 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
                 Post post = new Post(postId, postContent, created, updated, labels);
                 posts.add(post);
             }
-            updatedWriter = new Writer(id, name, posts);
-            return updatedWriter;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception) {
+            System.out.println("Error occurred " + exception.getMessage());
         }
+        return new Writer(id, name, posts);
     }
 
     @Override
-    public Writer save(Writer writer) throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
-
-        try {
-            System.out.println("Registering JDBC Driver...");
-            Class.forName(JdbcTemplate.getJdbcDriver());
-
-            System.out.println("Connecting to database...");
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            System.out.println("Creating new Writer...");
-            statement = connection.createStatement();
-
-            String creatingNewWriter = "INSERT INTO Writer (id, name, post_id) VALUES (" + writer.getId() + ", " + "'" + writer.getName() + "'" + ", " + writer.getId() + ")";
+    public Writer save(Writer writer) {
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
+            String creatingNewWriter = String.format(SQLQueries.SAVEWRITER.getQuery(), writer.getId())
+                    + ", " + "'" + writer.getName() + "'" + ", " + writer.getId() + ")";
 
             statement.executeUpdate(creatingNewWriter);
 
             System.out.println("New writer added to database");
-            return writer;
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception) {
+            System.out.println("Error occurred " + exception.getMessage());
         }
+        return writer;
     }
 
     @Override
-    public void deleteById(Long aLong) throws ClassNotFoundException, SQLException {
-        Connection connection = null;
-        Statement statement = null;
+    public void deleteById(Long aLong) {
+        try (
+                Connection connection = DatabaseConnection.getInstance().getConnection();
+                Statement statement = connection.createStatement()
+        ) {
 
-        try {
-            Class.forName(JdbcTemplate.getJdbcDriver());
-            connection = DriverManager.getConnection(JdbcTemplate.getDatabaseUrl(), JdbcTemplate.getUSER(), JdbcTemplate.getPASSWORD());
-
-            statement = connection.createStatement();
-
-            String gettingRecords = "SELECT * FROM Writer LEFT JOIN Post ON Writer.post_id = Post.id JOIN Label ON Post.lable_id = Label.id WHERE writer.id = " + aLong;
-
-            ResultSet resultSet = statement.executeQuery(gettingRecords);
+            ResultSet resultSet = statement.executeQuery(String.format(SQLQueries.DELETEWRITERBYID.getQuery(), aLong));
 
             while (resultSet.next()) {
                 Integer id = resultSet.getInt(1);
@@ -299,17 +214,10 @@ public class JdbcWriterRepositoryImpl implements WriterRepository {
 
             System.out.println("Deleting writer with id = " + aLong);
 
-            statement = connection.createStatement();
-
             String deletingWriter = "DELETE FROM Writer WHERE writer.id = " + aLong;
             statement.executeUpdate(deletingWriter);
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
+        } catch (SQLException exception) {
+            System.out.println("Error occurred " + exception.getMessage());
         }
     }
 }

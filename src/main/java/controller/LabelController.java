@@ -4,7 +4,6 @@ import model.Label;
 import repository.LabelRepository;
 import repository.repositoryImplementation.JdbcLabelRepositoryImpl;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class LabelController {
@@ -15,23 +14,27 @@ public class LabelController {
 
     }
 
-    public List<Label> getAll() throws ClassNotFoundException, SQLException {
+    public LabelController(LabelRepository labelRepository) {
+        this.jdbcLabelRepository = labelRepository;
+    }
+
+    public List<Label> getAll() {
         return jdbcLabelRepository.getAll();
     }
 
-    public Label getById(Long aLong) throws ClassNotFoundException, SQLException {
+    public Label getById(Long aLong) {
         return jdbcLabelRepository.getById(aLong);
     }
 
-    public void save(Label label) throws ClassNotFoundException, SQLException {
+    public void save(Label label) {
         jdbcLabelRepository.save(label);
     }
 
-    public void update(Label label) throws ClassNotFoundException, SQLException {
+    public void update(Label label) {
         jdbcLabelRepository.update(label);
     }
 
-    public void deleteById(Long aLong) throws ClassNotFoundException, SQLException {
+    public void deleteById(Long aLong) {
         jdbcLabelRepository.deleteById(aLong);
     }
 }

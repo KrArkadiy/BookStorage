@@ -4,7 +4,6 @@ import controller.PostController;
 import model.Label;
 import model.Post;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -22,43 +21,31 @@ public class PostView extends BasicView {
     void getById() {
         System.out.println("Enter id of necessary label");
         long id = SCANNER.nextInt();
-        try {
-            Post post = POST_CONTROLLER.getById(id);
-            System.out.println(post.getId() + post.getContent());
-            for (Label label : post.getLabels()) {
-                System.out.println(label.getName());
-            }
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("Error occurred");
+        Post post = POST_CONTROLLER.getById(id);
+        System.out.println(post.getId() + post.getContent());
+        for (Label label : post.getLabels()) {
+            System.out.println(label.getName());
         }
     }
 
     @Override
     void getAll() {
-        try {
-            List<Post> posts = POST_CONTROLLER.getAll();
-            for (Post post : posts) {
-                System.out.println(post.getId() + post.getContent());
-                for (Label label : post.getLabels()) {
-                    System.out.println(label.getName());
-                }
+        List<Post> posts = POST_CONTROLLER.getAll();
+        for (Post post : posts) {
+            System.out.println(post.getId() + post.getContent());
+            for (Label label : post.getLabels()) {
+                System.out.println(label.getName());
             }
-            System.out.println("Operation ended successfully");
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("Error occurred during operation");
         }
+        System.out.println("Operation ended successfully");
     }
 
     @Override
     void deleteById() {
         System.out.println("Enter id of the post you want to delete");
         long id = SCANNER.nextInt();
-        try {
-            POST_CONTROLLER.deleteById(id);
-            System.out.println("Operation ended successfully");
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("Error occurred");
-        }
+        POST_CONTROLLER.deleteById(id);
+        System.out.println("Operation ended successfully");
     }
 
     @Override
@@ -74,17 +61,14 @@ public class PostView extends BasicView {
         System.out.println("Enter label id for this post");
         int labelId = SCANNER.nextInt();
         List<Label> labels = new ArrayList<>();
-        try {
-            Post newPost = new Post(id, content, created, updated, labels);
-            POST_CONTROLLER.save(newPost);
-            System.out.println(newPost.getId() + " "
-                    + newPost.getContent() + " "
-                    + newPost.getCreated() + " "
-                    + newPost.getUpdated());
-            System.out.println("Operation ended successfully");
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("Error occurred");
-        }
+
+        Post newPost = new Post(id, content, created, updated, labels);
+        POST_CONTROLLER.save(newPost);
+        System.out.println(newPost.getId() + " "
+                + newPost.getContent() + " "
+                + newPost.getCreated() + " "
+                + newPost.getUpdated());
+        System.out.println("Operation ended successfully");
     }
 
     @Override
@@ -97,17 +81,14 @@ public class PostView extends BasicView {
         long updated = SCANNER.nextInt();
         System.out.println("Enter number of creation");
         long created = SCANNER.nextInt();
-        try {
-            List<Label> labels = POST_CONTROLLER.getById((long) id).getLabels();
-            Post post = new Post(id, content, updated, created, labels);
-            POST_CONTROLLER.update(post);
-            System.out.print(post.getId() + " "
-                    + post.getContent() + " "
-                    + post.getUpdated() + " "
-                    + post.getCreated() + " ");
-            labels.forEach(x -> System.out.println(x.getName()));
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("Error occurred");
-        }
+
+        List<Label> labels = POST_CONTROLLER.getById((long) id).getLabels();
+        Post post = new Post(id, content, updated, created, labels);
+        POST_CONTROLLER.update(post);
+        System.out.print(post.getId() + " "
+                + post.getContent() + " "
+                + post.getUpdated() + " "
+                + post.getCreated() + " ");
+        labels.forEach(x -> System.out.println(x.getName()));
     }
 }
