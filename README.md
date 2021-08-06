@@ -16,7 +16,7 @@
 <hr>
 Требования к приложению:
 <ol>
-  <li>Придерживаться шаблона MVC (пакеты model, repository, serviece, controller, view)</li>
+  <li>Придерживаться шаблона MVC (пакеты model, repository, controller, view)</li>
   <li>Для миграции БД использовать Liquibase</li>
   <li>Сервисный слой приложения должен быть покрыт юнит тестами (junit + mockito)</li>
   <li>Для импорта библиотек использовать Maven</li>
@@ -24,4 +24,4 @@
 
 <hr>
 
-Технологии: JavaSE8, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito.
+Технологии: JavaSE8+, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito.
