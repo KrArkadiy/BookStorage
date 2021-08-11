@@ -1,4 +1,3 @@
-/*
 package controller;
 
 import model.Writer;
@@ -86,4 +85,4 @@ class WriterControllerTest {
 
         verify(writerController, times(1)).deleteById(1L);
     }
-}*/
+}
