@@ -53,7 +53,6 @@ public class WriterView extends BasicView {
         System.out.println("Enter id of the new writer");
         int id = SCANNER.nextInt();
         List<Post> posts = new ArrayList<>();
-
         Writer newWriter = new Writer(id, name, posts);
         WRITER_CONTROLLER.save(newWriter);
         System.out.println(newWriter.getId() + " "
@@ -66,7 +65,6 @@ public class WriterView extends BasicView {
         String name = SCANNER.nextLine();
         System.out.println("Enter id of the writer you want to update");
         int id = SCANNER.nextInt();
-
         List<Post> posts = WRITER_CONTROLLER.getById((long) id).getPosts();
         Writer updatedWriter = new Writer(id, name, posts);
         WRITER_CONTROLLER.update(updatedWriter);

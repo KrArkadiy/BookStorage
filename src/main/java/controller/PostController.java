@@ -1,3 +1,4 @@
+
 package controller;
 
 import model.Post;
@@ -38,3 +39,4 @@ public class PostController {
         jdbcPostRepository.deleteById(aLong);
     }
 }
+

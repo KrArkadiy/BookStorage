@@ -10,40 +10,6 @@ import java.util.List;
 
 public class JdbcLabelRepositoryImpl implements LabelRepository {
 
-/*    public void creatingLabelTableInDatabase() throws ClassNotFoundException, SQLException {
-
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-            String creatingLabelTable = "CREATE TABLE label " +
-                    "(id INTEGER NOT NULL," +
-                    "name VARCHAR (255))";
-            statement.executeUpdate(creatingLabelTable);
-            System.out.println("Table successfully created...");
-        } catch(SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }
-
-    public void insertInformation() throws ClassNotFoundException, SQLException {
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-
-            String insertingInformationFirst = "INSERT INTO Label (id, name) VALUES (1, 'FirstLabel')";
-            String insertingInformationSecond = "INSERT INTO Label (id, name) VALUES (2, 'SecondLabel')";
-
-            statement.executeUpdate(insertingInformationFirst);
-            statement.executeUpdate(insertingInformationSecond);
-
-            System.out.println("Data successfully inserted...");
-        } catch (SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }*/
-
     @Override
     public Label getById(Long aLong) {
         int id = 0;
@@ -153,3 +119,4 @@ public class JdbcLabelRepositoryImpl implements LabelRepository {
         }
     }
 }
+

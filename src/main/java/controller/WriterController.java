@@ -1,3 +1,4 @@
+
 package controller;
 
 import model.Writer;
@@ -38,3 +39,4 @@ public class WriterController {
         jdbcWriterRepository.deleteById(aLong);
     }
 }
+

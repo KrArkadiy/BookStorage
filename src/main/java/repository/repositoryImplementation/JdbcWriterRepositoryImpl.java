@@ -12,44 +12,6 @@ import java.util.List;
 
 public class JdbcWriterRepositoryImpl implements WriterRepository {
 
-/*    public void creatingWriterTableInDatabase() throws ClassNotFoundException, SQLException {
-
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-
-            String creatingWriterTable = "CREATE TABLE Writer (" +
-                    "id INTEGER NOT NULL, " +
-                    "name varchar(255), " +
-                    "post_id INTEGER)";
-
-            statement.executeUpdate(creatingWriterTable);
-            System.out.println("Table successfully created...");
-        } catch (SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }
-
-    public void insertInformation() throws ClassNotFoundException, SQLException {
-
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-
-            String insertInformationFirst = "INSERT INTO Writer (id, name, post_id) VALUES (1, 'FirstWriter', 2)";
-            String insertInformationSecond = "INSERT INTO Writer (id, name, post_id) VALUES (2, 'SecondWriter', 1)";
-
-            statement.executeUpdate(insertInformationFirst);
-            statement.executeUpdate(insertInformationSecond);
-
-            System.out.println("Data successfully inserted...");
-        } catch (SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }*/
-
     @Override
     public Writer getById(Long aLong) {
 

@@ -11,48 +11,9 @@ import java.util.List;
 
 public class JdbcPostRepositoryImpl implements PostRepository {
 
-    /*public void creatingPostTableInDatabase() throws ClassNotFoundException, SQLException {
-
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-
-            String creatingWriterTable = "CREATE TABLE Post (" +
-                    "id INTEGER NOT NULL, " +
-                    "content VARCHAR (255), " +
-                    "created INTEGER NOT NULL, " +
-                    "updated INTEGER NOT NULL," +
-                    "label_id INTEGER)";
-
-            statement.executeUpdate(creatingWriterTable);
-            System.out.println("Table successfully created...");
-        } catch (SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }
-
-    public void insertInformation() throws ClassNotFoundException, SQLException {
-        try (
-                Connection connection = DatabaseConnection.getInstance().getConnection();
-                Statement statement = connection.createStatement()
-        ) {
-
-            String insertInformationFirst = "INSERT INTO Post (id, content, created, updated, label_id) VALUES (1, 'firstContent', 1, 1,1)";
-            String insertInformationSecond = "INSERT INTO Post (id, content, created, updated, label_id) VALUES (2, 'secondContent', 1, 1,2)";
-
-            statement.executeUpdate(insertInformationFirst);
-            statement.executeUpdate(insertInformationSecond);
-
-            System.out.println("Data successfully inserted...");
-        } catch (SQLException exception){
-            System.out.println("Error occurred " + exception.getMessage());
-        }
-    }*/
-
     @Override
     public Post getById(Long aLong) {
-        int id = 0;
+        Integer id = 0;
         String content = "";
         long created = 0L;
         long updated = 0L;
