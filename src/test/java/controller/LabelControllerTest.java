@@ -1,4 +1,3 @@
-/*
 package controller;
 
 import liquibase.pro.packaged.L;
@@ -85,4 +84,4 @@ class LabelControllerTest {
 
         verify(labelController, times(1)).deleteById(1L);
     }
-}*/
+}
