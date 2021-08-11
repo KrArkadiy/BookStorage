@@ -11,13 +11,13 @@ public class DatabaseConnection {
 
     private Connection connection;
 
-    private final String DATABASE_URL = "jdbc:mysql://localhost:3306/bookstorage";
+    private final String DATABASE_URL = "jdbc:mysql://localhost:3306/YOUR_DB_NAME";
 
     private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-    private final String USER = "root";
+    private final String USER = "YOUR_USERNAME";
 
-    private final String PASSWORD = "arkadiy";
+    private final String PASSWORD = "YOUR_PASSWORD";
 
     private DatabaseConnection() {
         try {
