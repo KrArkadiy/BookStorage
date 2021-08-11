@@ -1,10 +1,8 @@
 
 import view.ConsoleFunctionality;
 
-import java.sql.SQLException;
-
 public class BookStorage {
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) {
        ConsoleFunctionality runner = new ConsoleFunctionality();
         runner.run();
     }
